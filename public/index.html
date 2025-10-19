@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G & J Schools | School Management System</title>
+    <meta name="description" content="Complete school management system for G & J Schools">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner" style="display: none;">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Signup Page -->
+    <div class="auth-container" id="signupPage">
+        <div class="auth-left">
+            <div class="auth-logo">
+                <i class="fas fa-graduation-cap"></i> G & J Schools
+            </div>
+            <div class="auth-slogan">
+                Comprehensive School Management Solution
+            </div>
+            <ul class="auth-features">
+                <li><i class="fas fa-check"></i> Student Information Management</li>
+                <li><i class="fas fa-check"></i> Academic Progress Tracking</li>
+                <li><i class="fas fa-check"></i> Financial Management & Reporting</li>
+                <li><i class="fas fa-check"></i> Role-Based Access Control</li>
+                <li><i class="fas fa-check"></i> Real-time Analytics Dashboard</li>
+            </ul>
+        </div>
+        <div class="auth-right">
+            <div class="auth-form">
+                <h1 class="auth-title">Create Account</h1>
+                <p class="auth-subtitle">Set up your school management account</p>
+                
+                <form id="signupForm" novalidate>
+                    <div class="form-group">
+                        <label for="signupName">Full Name *</label>
+                        <input type="text" id="signupName" class="form-control" placeholder="Enter your full name" required>
+                        <span class="error-message" id="signupNameError"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address *</label>
+                        <input type="email" id="signupEmail" class="form-control" placeholder="Enter your email" required>
+                        <span class="error-message" id="signupEmailError"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupPassword">Password *</label>
+                        <input type="password" id="signupPassword" class="form-control" placeholder="Create a password (min 6 chars)" required minlength="6">
+                        <span class="error-message" id="signupPasswordError"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupSchool">School Name</label>
+                        <input type="text" id="signupSchool" class="form-control" placeholder="Enter your school name" value="G & J Schools">
+                        <span class="error-message" id="signupSchoolError"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Account Type *</label>
+                        <div class="role-selector">
+                            <div class="role-option admin selected" data-role="admin">
+                                <i class="fas fa-user-tie"></i>
+                                <div>Administrator</div>
+                            </div>
+                            <div class="role-option accountant" data-role="accountant">
+                                <i class="fas fa-calculator"></i>
+                                <div>Accountant</div>
+                            </div>
+                            <div class="role-option teacher" data-role="teacher">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                <div>Teacher</div>
+                            </div>
+                        </div>
+                        <span class="error-message" id="signupRoleError"></span>
+                    </div>
+                    
+                    <button type="submit" class="auth-btn" id="signupBtn">
+                        <span class="btn-text">Create Account</span>
+                        <span class="btn-spinner" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>
+                    </button>
+                </form>
+                
+                <div class="auth-switch">
+                    Already have an account? <a id="showLogin">Sign In</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div class="auth-container" id="loginPage" style="display: none;">
+        <div class="auth-left">
+            <div class="auth-logo">
+                <i class="fas fa-graduation-cap"></i> G & J Schools
+            </div>
+            <div class="auth-slogan">
+                Comprehensive School Management Solution
+            </div>
+            <ul class="auth-features">
+                <li><i class="fas fa-check"></i> Student Information Management</li>
+                <li><i class="fas fa-check"></i> Academic Progress Tracking</li>
+                <li><i class="fas fa-check"></i> Financial Management & Reporting</li>
+                <li><i class="fas fa-check"></i> Role-Based Access Control</li>
+                <li><i class="fas fa-check"></i> Real-time Analytics Dashboard</li>
+            </ul>
+        </div>
+        <div class="auth-right">
+            <div class="auth-form">
+                <h1 class="auth-title">Sign In</h1>
+                <p class="auth-subtitle">Access your school management dashboard</p>
+                
+                <form id="loginForm" novalidate>
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address *</label>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="Enter your email" required>
+                        <span class="error-message" id="loginEmailError"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword">Password *</label>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
+                        <span class="error-message" id="loginPasswordError"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Login As *</label>
+                        <div class="role-selector">
+                            <div class="role-option admin selected" data-role="admin">
+                                <i class="fas fa-crown"></i>
+                                <div>Administrator</div>
+                            </div>
+                            <div class="role-option accountant" data-role="accountant">
+                                <i class="fas fa-calculator"></i>
+                                <div>Accountant</div>
+                            </div>
+                            <div class="role-option teacher" data-role="teacher">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                <div>Teacher</div>
+                            </div>
+                        </div>
+                        <span class="error-message" id="loginRoleError"></span>
+                    </div>
+                    
+                    <button type="submit" class="auth-btn" id="loginBtn">
+                        <span class="btn-text">Sign In</span>
+                        <span class="btn-spinner" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>
+                    </button>
+                </form>
+                
+                <div class="auth-switch">
+                    Don't have an account? <a id="showSignup">Sign Up</a>
+                </div>
+
+                <!-- Test Credentials -->
+                <div class="demo-credentials">
+                    <h4>Test Credentials:</h4>
+                    <p><strong>Admin:</strong> admin@gjschools.com / admin123</p>
+                    <p><strong>Accountant:</strong> accountant@gjschools.com / account123</p>
+                    <p><strong>Teacher:</strong> teacher@gjschools.com / teacher123</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard-container" id="dashboard" style="display: none;">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span class="logo-text">G & J Schools</span>
+                </div>
+            </div>
+            <div class="nav-links">
+    <div class="nav-item active" data-page="dashboard">
+        <i class="fas fa-home"></i>
+        <span class="nav-text">Dashboard</span>
+    </div>
+    <div class="nav-item" data-page="students">
+        <i class="fas fa-user-graduate"></i>
+        <span class="nav-text">Students</span>
+    </div>
+    <div class="nav-item" data-page="teachers">
+        <i class="fas fa-chalkboard-teacher"></i>
+        <span class="nav-text">Teachers</span>
+    </div>
+    <div class="nav-item" data-page="allocations">
+        <i class="fas fa-tasks"></i>
+        <span class="nav-text">Allocations</span>
+    </div>
+    <div class="nav-item" data-page="attendance">
+        <i class="fas fa-clipboard-check"></i>
+        <span class="nav-text">Attendance</span>
+    </div>
+    <div class="nav-item" data-page="academic">
+        <i class="fas fa-book"></i>
+        <span class="nav-text">Grades</span>
+    </div>
+    <div class="nav-item" data-page="finance">
+        <i class="fas fa-money-bill-wave"></i>
+        <span class="nav-text">Finance</span>
+    </div>
+    <div class="nav-item" data-page="announcements">
+        <i class="fas fa-bullhorn"></i>
+        <span class="nav-text">Announcements</span>
+    </div>
+    <div class="nav-item" data-page="reports">
+        <i class="fas fa-chart-line"></i>
+        <span class="nav-text">Reports</span>
+    </div>
+    <div class="nav-item" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span class="nav-text">Logout</span>
+    </div>
+</div>
+</div>
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <div class="page-title">Dashboard <span class="role-badge admin" id="roleBadge">Administrator</span></div>
+                </div>
+                <div class="header-right">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search students, fees..." id="globalSearch">
+                    </div>
+                    <div class="user-profile" id="userProfileBtn">
+                        <div class="user-avatar" id="userAvatar">AD</div>
+                        <div class="user-name" id="userName">Admin User</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="content" id="contentArea">
+                <!-- Stats Overview -->
+                <div class="dashboard-overview">
+                    <div class="stat-card students">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalStudents">0</h3>
+                            <p>Total Students</p>
+                        </div>
+                    </div>
+                    <div class="stat-card teachers">
+                        <div class="stat-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>0</h3>
+                            <p>Teachers</p>
+                        </div>
+                    </div>
+                    <div class="stat-card fees">
+                        <div class="stat-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalFees">GHS 0</h3>
+                            <p>Total Fees Collected</p>
+                        </div>
+                    </div>
+                    <div class="stat-card attendance">
+                        <div class="stat-icon">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>92%</h3>
+                            <p>Attendance Rate</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">Student Enrollment</div>
+                            <div class="chart-actions">
+                                <button title="Refresh"><i class="fas fa-sync"></i></button>
+                                <button title="Fullscreen"><i class="fas fa-expand"></i></button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="enrollmentChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <div class="chart-title">Fee Collection</div>
+                            <div class="chart-actions">
+                                <button title="Refresh"><i class="fas fa-sync"></i></button>
+                                <button title="Fullscreen"><i class="fas fa-expand"></i></button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="feeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Students -->
+                <div class="recent-section">
+                    <div class="section-header">
+                        <div class="section-title">Recent Students</div>
+                        <div class="view-all" id="viewAllStudents">View All</div>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Class</th>
+                                    <th>Parent</th>
+                                    <th>Contact</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsTableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center">Loading students...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Fee Records -->
+                <div class="recent-section">
+                    <div class="section-header">
+                        <div class="section-title">Fee Records</div>
+                        <div class="tabs">
+                            <div class="tab active" data-tab="all">All Fees</div>
+                            <div class="tab" data-tab="paid">Paid</div>
+                            <div class="tab" data-tab="pending">Pending</div>
+                            <div class="tab" data-tab="overdue">Overdue</div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Invoice ID</th>
+                                    <th>Student</th>
+                                    <th>Class</th>
+                                    <th>Amount</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="feeTableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center">Loading fees...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Add Student Form -->
+                <div class="form-container" id="addStudentForm" style="display: none;">
+                    <div class="form-title">Add New Student</div>
+                    <form id="studentForm" novalidate>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="studentName">Full Name *</label>
+                                <input type="text" id="studentName" class="form-control" placeholder="Enter full name" required>
+                                <span class="error-message" id="studentNameError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="studentEmail">Email Address</label>
+                                <input type="email" id="studentEmail" class="form-control" placeholder="Enter email">
+                                <span class="error-message" id="studentEmailError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="studentPhone">Phone Number</label>
+                                <input type="tel" id="studentPhone" class="form-control" placeholder="Enter phone number">
+                                <span class="error-message" id="studentPhoneError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="studentDOB">Date of Birth</label>
+                                <input type="date" id="studentDOB" class="form-control">
+                                <span class="error-message" id="studentDOBError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="studentClass">Class/Grade</label>
+                                <select id="studentClass" class="form-control">
+                                    <option value="Grade 7A">Grade 7A</option>
+                                    <option value="Grade 7B">Grade 7B</option>
+                                    <option value="Grade 8A">Grade 8A</option>
+                                    <option value="Grade 8B">Grade 8B</option>
+                                    <option value="Grade 9A">Grade 9A</option>
+                                    <option value="Grade 9B">Grade 9B</option>
+                                </select>
+                                <span class="error-message" id="studentClassError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="parentName">Parent/Guardian Name</label>
+                                <input type="text" id="parentName" class="form-control" placeholder="Enter parent/guardian name">
+                                <span class="error-message" id="parentNameError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="parentPhone">Parent Phone</label>
+                                <input type="tel" id="parentPhone" class="form-control" placeholder="Enter parent phone">
+                                <span class="error-message" id="parentPhoneError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="studentAddress">Address</label>
+                                <textarea id="studentAddress" class="form-control" rows="2" placeholder="Enter address"></textarea>
+                                <span class="error-message" id="studentAddressError"></span>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="action-btn outline" id="resetStudentForm">Reset</button>
+                            <button type="submit" class="action-btn" id="saveStudentBtn">
+                                <span class="btn-text">Add Student</span>
+                                <span class="btn-spinner" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Receipt Section -->
+                <div class="receipt" id="receiptSection" style="display: none;">
+                    <div class="receipt-header">
+                        <h2 class="receipt-title">G & J Schools</h2>
+                        <p class="receipt-subtitle">Official Fee Receipt</p>
+                    </div>
+                    
+                    <div class="receipt-details">
+                        <div>
+                            <div class="receipt-item">
+                                <div class="receipt-label">Receipt Number</div>
+                                <div id="receiptNumber">#RC20250101001</div>
+                            </div>
+                            <div class="receipt-item">
+                                <div class="receipt-label">Date</div>
+                                <div id="receiptDate">January 1, 2025</div>
+                            </div>
+                            <div class="receipt-item">
+                                <div class="receipt-label">Issued By</div>
+                                <div id="issuedBy">Accountant Name</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="receipt-item">
+                                <div class="receipt-label">Student</div>
+                                <div id="studentReceiptName">Student Name</div>
+                            </div>
+                            <div class="receipt-item">
+                                <div class="receipt-label">Student ID</div>
+                                <div id="studentReceiptId">#ST2025001</div>
+                            </div>
+                            <div class="receipt-item">
+                                <div class="receipt-label">Class</div>
+                                <div id="studentReceiptClass">Grade 8A</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <table class="receipt-table">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="receiptTableBody">
+                            <tr>
+                                <td>Tuition Fee</td>
+                                <td id="receiptAmount">GHS 2450.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="receipt-total">
+                        <div class="receipt-label">Total:</div>
+                        <div id="receiptTotal">GHS 2450.00</div>
+                    </div>
+                    
+                    <div class="receipt-footer">
+                        <p>Payment received with thanks. This is an official receipt.</p>
+                        <p>G & J School Management System</p>
+                    </div>
+                    
+                    <div class="form-actions" style="margin-top: 20px;">
+                        <button class="action-btn outline" id="closeReceipt">Close</button>
+                        <button class="action-btn" id="printReceiptBtn">
+                            <i class="fas fa-print"></i> Print Receipt
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Detail Modal -->
+    <div class="modal" id="studentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Student Details</h3>
+                <button class="modal-close" id="closeStudentModal">&times;</button>
+            </div>
+            <div class="modal-body" id="studentModalBody">
+                <!-- Student details will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button class="action-btn outline" id="closeStudentModalBtn">Close</button>
+                <button class="action-btn">Edit Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Record Payment</h3>
+                <button class="modal-close" id="closePaymentModal">&times;</button>
+            </div>
+            <div class="modal-body" id="paymentModalBody">
+                <!-- Payment form will be populated here -->
+            </div>
+            <div class="modal-footer">
+                <button class="action-btn outline" id="closePaymentModalBtn">Cancel</button>
+                <button class="action-btn" id="confirmPayment">
+                    <span class="btn-text">Record Payment</span>
+                    <span class="btn-spinner" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toastNotification">
+        <i class="fas fa-check-circle" id="toastIcon"></i>
+        <span id="toastMessage">Operation completed successfully!</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

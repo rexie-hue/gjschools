@@ -1,0 +1,137 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: edumanage_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: edumanage
+      POSTGRES_USER: edumanage_user
+      POSTGRES_PASSWORD: edumanage_password
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/pgdata
+      - ./schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - edumanage_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U edumanage_user -d edumanage"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Node.js Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: edumanage_app
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      DATABASE_URL: postgresql://edumanage_user:edumanage_password@postgres:5432/edumanage
+      JWT_SECRET: dev_jwt_secret_change_in_production
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "4000:4000"
+    networks:
+      - edumanage_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: npm run dev
+
+  # Redis (optional - for session storage/caching)
+  redis:
+    image: redis:7-alpine
+    container_name: edumanage_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - edumanage_network
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+
+  # pgAdmin (optional - for database management)
+  pgadmin:
+    image: dpage/pgadmin4:7
+    container_name: edumanage_pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@edumanage.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - edumanage_network
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  edumanage_network:
+    driver: bridge
+
+# Development overrides
+# Use: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+---
+# docker-compose.dev.yml (optional)
+version: '3.8'
+
+services:
+  app:
+    environment:
+      NODE_ENV: development
+      DEBUG: edumanage:*
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
+
+  postgres:
+    ports:
+      - "5432:5432"
+
+# Production overrides  
+# Use: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
+---
+# docker-compose.prod.yml (optional)
+version: '3.8'
+
+services:
+  app:
+    build:
+      target: production
+    environment:
+      NODE_ENV: production
+    command: npm start
+    volumes: []
+
+  postgres:
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+
+secrets:
+  db_password:
+    external: true
