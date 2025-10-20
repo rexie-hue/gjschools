@@ -1,12 +1,9 @@
 const { Pool } = require('pg');
 
+// Use DATABASE_URL from environment for production, fallback to local config for development
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'edumanage',
-  password: 'AbenaAtaa@1',
-  port: 5432,
-  ssl: false,
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
@@ -30,8 +27,6 @@ async function testConnection() {
     return false;
   }
 }
-
-testConnection();
 
 process.on('SIGINT', () => {
   pool.end(() => {
