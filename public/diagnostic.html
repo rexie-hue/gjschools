@@ -267,19 +267,19 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔍 G & J Schools - System Diagnostic Tool</h1>
+            <h1>ðŸ” G & J Schools - System Diagnostic Tool</h1>
             <p>Complete system health check and troubleshooting</p>
         </div>
 
         <div class="summary-box" id="summaryBox" style="display: none;">
-            <h3>📊 System Status Summary</h3>
+            <h3>ðŸ“Š System Status Summary</h3>
             <div class="summary-stats">
                 <div class="stat">
-                    <div class="stat-value" id="serverStatus">❓</div>
+                    <div class="stat-value" id="serverStatus">â“</div>
                     <div class="stat-label">Server</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-value" id="authStatus">❓</div>
+                    <div class="stat-value" id="authStatus">â“</div>
                     <div class="stat-label">Authentication</div>
                 </div>
                 <div class="stat">
@@ -295,7 +295,7 @@
 
         <div class="test-grid">
             <div class="test-section">
-                <h2><span class="icon">🌐</span> Server Connection</h2>
+                <h2><span class="icon">ðŸŒ</span> Server Connection</h2>
                 <p style="color: #666; margin-bottom: 15px; font-size: 14px;">
                     Tests if the backend server is running and responding
                 </p>
@@ -306,7 +306,7 @@
             </div>
 
             <div class="test-section">
-                <h2><span class="icon">🔐</span> Authentication Test</h2>
+                <h2><span class="icon">ðŸ”</span> Authentication Test</h2>
                 <p style="color: #666; margin-bottom: 15px; font-size: 14px;">
                     Tests login functionality with credentials
                 </p>
@@ -324,7 +324,7 @@
             </div>
 
             <div class="test-section">
-                <h2><span class="icon">📡</span> API Endpoints</h2>
+                <h2><span class="icon">ðŸ“¡</span> API Endpoints</h2>
                 <p style="color: #666; margin-bottom: 15px; font-size: 14px;">
                     Tests all major API endpoints
                 </p>
@@ -333,7 +333,7 @@
             </div>
 
             <div class="test-section">
-                <h2><span class="icon">💾</span> Database Content</h2>
+                <h2><span class="icon">ðŸ’¾</span> Database Content</h2>
                 <p style="color: #666; margin-bottom: 15px; font-size: 14px;">
                     Checks if database has seeded data
                 </p>
@@ -342,7 +342,7 @@
             </div>
 
             <div class="test-section">
-                <h2><span class="icon">📊</span> Dashboard Data</h2>
+                <h2><span class="icon">ðŸ“Š</span> Dashboard Data</h2>
                 <p style="color: #666; margin-bottom: 15px; font-size: 14px;">
                     Simulates dashboard data loading
                 </p>
@@ -351,7 +351,7 @@
             </div>
 
             <div class="test-section">
-                <h2><span class="icon">🔧</span> Quick Actions</h2>
+                <h2><span class="icon">ðŸ”§</span> Quick Actions</h2>
                 <p style="color: #666; margin-bottom: 15px; font-size: 14px;">
                     Common troubleshooting actions
                 </p>
@@ -364,27 +364,27 @@
         </div>
 
         <div class="test-section">
-            <h2><span class="icon">💡</span> Troubleshooting Guide</h2>
+            <h2><span class="icon">ðŸ’¡</span> Troubleshooting Guide</h2>
             
             <div class="quick-fix">
-                <h4>❌ If Server Test Fails:</h4>
+                <h4>âŒ If Server Test Fails:</h4>
                 <p>Make sure the server is running:</p>
                 <code>npm run dev</code>
             </div>
 
             <div class="quick-fix">
-                <h4>❌ If Database is Empty:</h4>
+                <h4>âŒ If Database is Empty:</h4>
                 <p>Run the seed script to populate data:</p>
                 <code>npm run seed</code>
             </div>
 
             <div class="quick-fix">
-                <h4>❌ If Login Fails:</h4>
+                <h4>âŒ If Login Fails:</h4>
                 <p>Check PostgreSQL is running and credentials in .env file</p>
             </div>
 
             <div class="quick-fix">
-                <h4>❌ If Dashboard is Empty:</h4>
+                <h4>âŒ If Dashboard is Empty:</h4>
                 <p>1. Run all tests above<br>
                 2. Check browser console (F12)<br>
                 3. Verify API calls return data<br>
@@ -428,13 +428,13 @@
             // Update server status
             if (testResults.serverResult) {
                 document.getElementById('serverStatus').textContent = 
-                    testResults.serverResult.status === 'success' ? '✅' : '❌';
+                    testResults.serverResult.status === 'success' ? 'âœ…' : 'âŒ';
             }
 
             // Update auth status
             if (testResults.loginResult) {
                 document.getElementById('authStatus').textContent = 
-                    testResults.loginResult.status === 'success' ? '✅' : '❌';
+                    testResults.loginResult.status === 'success' ? 'âœ…' : 'âŒ';
             }
 
             // Update counts from database test
@@ -455,14 +455,14 @@
                 
                 if (response.ok) {
                     displayResult('serverResult', 'success', 
-                        '✅ Server is running and responding!', data);
+                        'âœ… Server is running and responding!', data);
                 } else {
                     displayResult('serverResult', 'error', 
-                        '❌ Server responded with error', data);
+                        'âŒ Server responded with error', data);
                 }
             } catch (error) {
                 displayResult('serverResult', 'error', 
-                    '❌ Cannot connect to server. Is it running?', 
+                    'âŒ Cannot connect to server. Is it running?', 
                     { error: error.message, suggestion: 'Run: npm run dev' });
             } finally {
                 setButtonLoading('serverBtn', false);
@@ -476,7 +476,7 @@
 
             if (!email || !password) {
                 displayResult('loginResult', 'warning', 
-                    '⚠️ Please enter both email and password');
+                    'âš ï¸ Please enter both email and password');
                 setButtonLoading('loginBtn', false);
                 return;
             }
@@ -496,17 +496,17 @@
                     localStorage.setItem('edumanage_user', JSON.stringify(data.user));
                     
                     displayResult('loginResult', 'success', 
-                        '✅ Login successful! Token saved.', { 
+                        'âœ… Login successful! Token saved.', { 
                             user: data.user,
                             tokenPreview: data.token.substring(0, 30) + '...'
                         });
                 } else {
                     displayResult('loginResult', 'error', 
-                        '❌ Login failed!', data);
+                        'âŒ Login failed!', data);
                 }
             } catch (error) {
                 displayResult('loginResult', 'error', 
-                    '❌ Login request failed!', { error: error.message });
+                    'âŒ Login request failed!', { error: error.message });
             } finally {
                 setButtonLoading('loginBtn', false);
             }
@@ -515,7 +515,7 @@
         async function testAllEndpoints() {
             if (!authToken) {
                 displayResult('apiResult', 'warning', 
-                    '⚠️ Please login first to test APIs!');
+                    'âš ï¸ Please login first to test APIs!');
                 return;
             }
 
@@ -547,7 +547,7 @@
 
                     results.push({
                         endpoint: endpoint.name,
-                        status: success ? '✅' : '❌',
+                        status: success ? 'âœ…' : 'âŒ',
                         statusCode: response.status,
                         recordCount: Array.isArray(data) ? data.length : 'N/A',
                         sample: Array.isArray(data) && data.length > 0 ? data[0] : null
@@ -556,7 +556,7 @@
                     allSuccess = false;
                     results.push({
                         endpoint: endpoint.name,
-                        status: '❌',
+                        status: 'âŒ',
                         error: error.message
                     });
                 }
@@ -564,7 +564,7 @@
 
             displayResult('apiResult', 
                 allSuccess ? 'success' : 'warning',
-                allSuccess ? '✅ All API endpoints working!' : '⚠️ Some endpoints have issues',
+                allSuccess ? 'âœ… All API endpoints working!' : 'âš ï¸ Some endpoints have issues',
                 results
             );
 
@@ -574,7 +574,7 @@
         async function testDatabaseData() {
             if (!authToken) {
                 displayResult('dbResult', 'warning', 
-                    '⚠️ Please login first!');
+                    'âš ï¸ Please login first!');
                 return;
             }
 
@@ -617,13 +617,13 @@
                 displayResult('dbResult', 
                     hasData ? 'success' : 'warning',
                     hasData ? 
-                        '✅ Database has data!' : 
-                        '⚠️ Database is empty! Run: npm run seed',
+                        'âœ… Database has data!' : 
+                        'âš ï¸ Database is empty! Run: npm run seed',
                     summary
                 );
             } catch (error) {
                 displayResult('dbResult', 'error', 
-                    '❌ Database test failed!', { error: error.message });
+                    'âŒ Database test failed!', { error: error.message });
             } finally {
                 setButtonLoading('dbBtn', false);
             }
@@ -632,7 +632,7 @@
         async function testDashboardLoad() {
             if (!authToken) {
                 displayResult('dashResult', 'warning', 
-                    '⚠️ Please login first!');
+                    'âš ï¸ Please login first!');
                 return;
             }
 
@@ -677,13 +677,13 @@
                 displayResult('dashResult',
                     hasData ? 'success' : 'warning',
                     hasData ?
-                        `✅ Dashboard would load successfully in ${loadTime}ms` :
-                        '⚠️ Dashboard would be empty - no data found!',
+                        `âœ… Dashboard would load successfully in ${loadTime}ms` :
+                        'âš ï¸ Dashboard would be empty - no data found!',
                     dashboardData
                 );
             } catch (error) {
                 displayResult('dashResult', 'error',
-                    '❌ Dashboard load test failed!', { error: error.message });
+                    'âŒ Dashboard load test failed!', { error: error.message });
             } finally {
                 setButtonLoading('dashBtn', false);
             }
@@ -706,7 +706,7 @@
             localStorage.removeItem('edumanage_token');
             localStorage.removeItem('edumanage_user');
             displayResult('loginResult', 'info', 
-                'ℹ️ Authentication cleared. Login again to test.');
+                'â„¹ï¸ Authentication cleared. Login again to test.');
         }
 
         function exportResults() {
@@ -725,7 +725,7 @@
 
         // Auto-run server test on load
         window.onload = () => {
-            console.log('🔍 Diagnostic tool loaded');
+            console.log('ðŸ” Diagnostic tool loaded');
             setTimeout(testServerConnection, 500);
         };
     </script>

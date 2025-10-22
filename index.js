@@ -119,30 +119,30 @@ function authenticate(req, res, next) {
   const auth = req.headers.authorization;
   
   // Log for debugging
-  console.log('🔐 Auth attempt:', {
+  console.log('ðŸ” Auth attempt:', {
     hasAuth: !!auth,
     path: req.path,
     method: req.method
   });
   
   if (!auth) {
-    console.log('❌ No authorization header');
+    console.log('âŒ No authorization header');
     return res.status(401).json({ message: 'Missing authorization header' });
   }
   
   const parts = auth.split(' ');
   if (parts.length !== 2 || parts[0] !== 'Bearer') {
-    console.log('❌ Invalid auth format:', auth.substring(0, 20));
+    console.log('âŒ Invalid auth format:', auth.substring(0, 20));
     return res.status(401).json({ message: 'Invalid authorization format. Use: Bearer <token>' });
   }
 
   try {
     const payload = jwt.verify(parts[1], JWT_SECRET);
     req.user = payload;
-    console.log('✅ Auth successful for:', payload.email);
+    console.log('âœ… Auth successful for:', payload.email);
     next();
   } catch (err) {
-    console.log('❌ Token verification failed:', err.message);
+    console.log('âŒ Token verification failed:', err.message);
     return res.status(401).json({ message: 'Invalid or expired token', error: err.message });
   }
 }
@@ -150,7 +150,7 @@ function authenticate(req, res, next) {
 // Middleware: authorize roles
 function authorize(allowedRoles = []) {
   return (req, res, next) => {
-    console.log('🔑 Authorization check:', {
+    console.log('ðŸ”‘ Authorization check:', {
       user: req.user?.email,
       userRole: req.user?.role,
       allowedRoles,
@@ -158,12 +158,12 @@ function authorize(allowedRoles = []) {
     });
     
     if (!req.user) {
-      console.log('❌ No user in request');
+      console.log('âŒ No user in request');
       return res.status(401).json({ message: 'User not authenticated' });
     }
     
     if (allowedRoles.length && !allowedRoles.includes(req.user.role)) {
-      console.log('❌ Role not authorized:', req.user.role, 'not in', allowedRoles);
+      console.log('âŒ Role not authorized:', req.user.role, 'not in', allowedRoles);
       return res.status(403).json({ 
         message: 'Access denied for your role',
         yourRole: req.user.role,
@@ -171,7 +171,7 @@ function authorize(allowedRoles = []) {
       });
     }
     
-    console.log('✅ Authorization successful');
+    console.log('âœ… Authorization successful');
     next();
   };
 }

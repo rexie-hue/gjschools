@@ -8,30 +8,30 @@ A comprehensive school management system built with Node.js, Express, PostgreSQL
 
 ## Features
 
-### 🎓 Student Management
+### ðŸŽ“ Student Management
 - Complete student information system
 - Parent/guardian contact management
 - Academic progress tracking
 - Student profile management
 
-### 💰 Financial Management
+### ðŸ’° Financial Management
 - Fee invoice generation
 - Payment processing
 - Receipt generation and printing
 - Financial reporting and analytics
 
-### 👥 Role-Based Access Control
+### ðŸ‘¥ Role-Based Access Control
 - **Administrator**: Full system access
 - **Accountant**: Financial management focus
 - **Teacher**: Read-only student information
 
-### 📊 Analytics & Reporting
+### ðŸ“Š Analytics & Reporting
 - Real-time dashboard with charts
 - Student enrollment trends
 - Fee collection analytics
 - Performance metrics
 
-### 🔒 Security Features
+### ðŸ”’ Security Features
 - JWT-based authentication
 - Role-based permissions
 - Input validation and sanitization
@@ -124,18 +124,18 @@ After running the seed script, you can login with:
 
 ```
 george/
-├── public/                 # Frontend files
-│   ├── index.html         # Main HTML file
-│   ├── styles.css         # Styling
-│   └── script.js          # Frontend JavaScript
-├── index.js               # Main server file
-├── db.js                  # Database connection
-├── validators.js          # Input validation schemas
-├── schema.sql             # Database schema
-├── seed.js                # Database seeding script
-├── package.json           # Dependencies and scripts
-├── .env                   # Environment variables
-└── README.md              # This file
+â”œâ”€â”€ public/                 # Frontend files
+â”‚   â”œâ”€â”€ index.html         # Main HTML file
+â”‚   â”œâ”€â”€ styles.css         # Styling
+â”‚   â””â”€â”€ script.js          # Frontend JavaScript
+â”œâ”€â”€ index.js               # Main server file
+â”œâ”€â”€ db.js                  # Database connection
+â”œâ”€â”€ validators.js          # Input validation schemas
+â”œâ”€â”€ schema.sql             # Database schema
+â”œâ”€â”€ seed.js                # Database seeding script
+â”œâ”€â”€ package.json           # Dependencies and scripts
+â”œâ”€â”€ .env                   # Environment variables
+â””â”€â”€ README.md              # This file
 ```
 
 ## API Endpoints

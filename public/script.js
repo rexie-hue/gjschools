@@ -32,25 +32,22 @@ const API_BASE = '';
 const TOKEN_KEY = 'edumanage_token';
 const USER_KEY = 'edumanage_user';
 
-
-// AUTHENTICATION HEADERS
-
+// ====================================
+// FIXED AUTHENTICATION HEADERS
+// ====================================
 function authHeaders() {
     const token = localStorage.getItem(TOKEN_KEY);
-    console.log('🔐 Getting auth headers:', { hasToken: !!token });
+    console.log('ðŸ”‘ Getting auth headers:', { hasToken: !!token });
     
-    const headers = {
-        'Content-Type': 'application/json'
-    };
-    
-    if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-        console.log('✅ Token added to headers');
-    } else {
-        console.warn('⚠️ No token found in localStorage');
+    if (!token) {
+        console.warn('âš ï¸ No token found in localStorage');
+        return { 'Content-Type': 'application/json' };
     }
     
-    return headers;
+    return { 
+        'Authorization': `Bearer ${token}`, 
+        'Content-Type': 'application/json' 
+    };
 }
 
 // Utility functions
@@ -150,7 +147,7 @@ const elements = {
 // INITIALIZE APPLICATION
 // ====================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Application initializing...');
+    console.log('ðŸš€ Application initializing...');
     initializeAuth();
     initializeEventListeners();
     checkAuthStatus();
@@ -160,7 +157,7 @@ function initializeAuth() {
     const storedUser = localStorage.getItem(USER_KEY);
     const storedToken = localStorage.getItem(TOKEN_KEY);
     
-    console.log('🔍 Checking stored credentials:', { 
+    console.log('ðŸ” Checking stored credentials:', { 
         hasUser: !!storedUser, 
         hasToken: !!storedToken 
     });
@@ -168,7 +165,7 @@ function initializeAuth() {
     if (storedUser && storedToken) {
         try {
             currentUser = JSON.parse(storedUser);
-            console.log('✅ Found stored user:', currentUser.email);
+            console.log('âœ… Found stored user:', currentUser.email);
             showDashboard();
             
             // Load data after showing dashboard
@@ -176,11 +173,11 @@ function initializeAuth() {
                 loadDashboardData();
             }, 300);
         } catch (error) {
-            console.error('❌ Error parsing stored user data:', error);
+            console.error('âŒ Error parsing stored user data:', error);
             logout();
         }
     } else {
-        console.log('ℹ️ No stored credentials, showing login page');
+        console.log('â„¹ï¸ No stored credentials, showing login page');
         showLoginPage();
     }
 }
@@ -833,14 +830,14 @@ window.addEventListener('error', function(e) {
     console.error('Global error:', e.error);
 });
 
-console.log('✅ All initialization functions loaded');
+console.log('âœ… All initialization functions loaded');
 // ====================================
 // FIXED LOGIN HANDLER
 // ====================================
 async function handleLogin(e) {
     e.preventDefault();
     
-    console.log('🔐 Login attempt started...');
+    console.log('ðŸ” Login attempt started...');
     clearFormErrors('loginForm');
     setButtonLoading(elements.loginBtn, true);
     
@@ -850,7 +847,7 @@ async function handleLogin(e) {
         role: currentRole
     };
     
-    console.log('📝 Login data:', { email: formData.email, role: formData.role });
+    console.log('ðŸ“ Login data:', { email: formData.email, role: formData.role });
     
     let hasErrors = false;
     
@@ -873,24 +870,24 @@ async function handleLogin(e) {
     }
     
     try {
-        console.log('📤 Sending login request...');
+        console.log('ðŸ“¤ Sending login request...');
         const response = await fetch('/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
         });
         
-        console.log('📥 Login response status:', response.status);
+        console.log('ðŸ“¥ Login response status:', response.status);
         const data = await response.json();
-        console.log('📥 Login response data:', data);
+        console.log('ðŸ“¥ Login response data:', data);
         
         if (data.success && data.token) {
             currentUser = data.user;
             localStorage.setItem(USER_KEY, JSON.stringify(currentUser));
             localStorage.setItem(TOKEN_KEY, data.token);
             
-            console.log('✅ Login successful:', currentUser.email);
-            console.log('✅ Token saved:', data.token.substring(0, 20) + '...');
+            console.log('âœ… Login successful:', currentUser.email);
+            console.log('âœ… Token saved:', data.token.substring(0, 20) + '...');
             
             showToast(`Welcome, ${currentUser.name}!`, 'success');
             
@@ -899,15 +896,15 @@ async function handleLogin(e) {
             
             // Then load data after a small delay
             setTimeout(() => {
-                console.log('📊 Loading dashboard data...');
+                console.log('ðŸ“Š Loading dashboard data...');
                 loadDashboardData();
             }, 300);
         } else {
-            console.error('❌ Login failed:', data.message);
+            console.error('âŒ Login failed:', data.message);
             showToast(data.message || 'Login failed. Please check your credentials.', 'error');
         }
     } catch (error) {
-        console.error('❌ Login error:', error);
+        console.error('âŒ Login error:', error);
         showToast('Network error. Please try again.', 'error');
     } finally {
         setButtonLoading(elements.loginBtn, false);
@@ -982,7 +979,7 @@ async function handleSignup(e) {
 }
 
 function logout() {
-    console.log('🚪 Logging out...');
+    console.log('ðŸšª Logging out...');
     currentUser = null;
     localStorage.removeItem(USER_KEY);
     localStorage.removeItem(TOKEN_KEY);
@@ -1003,12 +1000,12 @@ function checkAuthStatus() {
     fetch('/me', { headers: authHeaders() })
         .then(response => {
             if (!response.ok) {
-                console.warn('⚠️ Auth check failed, logging out');
+                console.warn('âš ï¸ Auth check failed, logging out');
                 logout();
             }
         })
         .catch(() => {
-            console.warn('⚠️ Auth check error, logging out');
+            console.warn('âš ï¸ Auth check error, logging out');
             logout();
         });
 }
@@ -1351,30 +1348,32 @@ function showStudentsContent() {
 
 
 
+// Data loading functions
 
-//  DASHBOARD DATA LOADING
-
+// ====================================
+// FIXED DASHBOARD DATA LOADING
+// ====================================
 
 async function loadDashboardData() {
     try {
         showLoading(true);
         
-        console.log('📥 Starting to load dashboard data...');
+        console.log('ðŸ“¥ Starting to load dashboard data...');
         
         // Check if we have auth token
         const token = localStorage.getItem(TOKEN_KEY);
         if (!token) {
-            console.error('❌ No auth token found - redirecting to login');
+            console.error('âŒ No auth token found - redirecting to login');
             logout();
             return;
         }
         
-        console.log('✅ Token found, loading data...');
+        console.log('âœ… Token found, loading data...');
         
         // Load students with better error handling
         try {
             console.log('Fetching students...');
-            const studentsResponse = await fetch(`${API_BASE}/api/students`, { 
+            const studentsResponse = await fetch('/api/students', { 
                 headers: authHeaders(),
                 method: 'GET'
             });
@@ -1382,7 +1381,7 @@ async function loadDashboardData() {
             console.log('Students response status:', studentsResponse.status);
             
             if (studentsResponse.status === 401 || studentsResponse.status === 403) {
-                console.error('❌ Authentication failed - token may be invalid');
+                console.error('âŒ Authentication failed - token may be invalid');
                 showToast('Session expired. Please login again.', 'error');
                 logout();
                 return;
@@ -1391,22 +1390,21 @@ async function loadDashboardData() {
             if (studentsResponse.ok) {
                 const studentsData = await studentsResponse.json();
                 students = Array.isArray(studentsData) ? studentsData.map(normalizeStudent) : [];
-                console.log('✅ Loaded students:', students.length);
+                console.log('âœ… Loaded students:', students.length);
             } else {
                 const errorText = await studentsResponse.text();
-                console.error('❌ Failed to load students:', studentsResponse.status, errorText);
+                console.error('âŒ Failed to load students:', studentsResponse.status, errorText);
                 students = [];
-                showToast('Could not load students data', 'warning');
             }
         } catch (err) {
-            console.error('❌ Error loading students:', err);
+            console.error('âŒ Error loading students:', err);
             students = [];
         }
         
         // Load fees with better error handling
         try {
             console.log('Fetching fees...');
-            const feesResponse = await fetch(`${API_BASE}/api/fees`, { 
+            const feesResponse = await fetch('/api/fees', { 
                 headers: authHeaders(),
                 method: 'GET'
             });
@@ -1416,15 +1414,14 @@ async function loadDashboardData() {
             if (feesResponse.ok) {
                 const feesData = await feesResponse.json();
                 fees = Array.isArray(feesData) ? feesData.map(normalizeFee) : [];
-                console.log('✅ Loaded fees:', fees.length);
+                console.log('âœ… Loaded fees:', fees.length);
             } else {
                 const errorText = await feesResponse.text();
-                console.error('❌ Failed to load fees:', feesResponse.status, errorText);
+                console.error('âŒ Failed to load fees:', feesResponse.status, errorText);
                 fees = [];
-                showToast('Could not load fees data', 'warning');
             }
         } catch (err) {
-            console.error('❌ Error loading fees:', err);
+            console.error('âŒ Error loading fees:', err);
             fees = [];
         }
         
@@ -1434,28 +1431,29 @@ async function loadDashboardData() {
         // Load grades
         await loadGrades();
         
-        // Update the UI with loaded data - even if some arrays are empty
-        console.log('📊 Updating dashboard UI...');
+        // Update the UI with loaded data
+        console.log('ðŸ“Š Updating dashboard UI...');
         updateDashboardStats();
         populateStudentsTable();
         populateFeesTable();
         
         // Initialize charts after a brief delay
         setTimeout(() => {
-            console.log('📈 Initializing charts...');
+            console.log('ðŸ“ˆ Initializing charts...');
             initCharts();
         }, 200);
         
-        console.log('✅ Dashboard data loaded successfully');
-        showToast('Dashboard loaded!', 'success');
+        console.log('âœ… Dashboard data loaded successfully');
+        showToast('Dashboard loaded successfully!', 'success');
         
     } catch (error) {
-        console.error('❌ Error loading dashboard data:', error);
+        console.error('âŒ Error loading dashboard data:', error);
         showToast('Error loading data. Please refresh the page.', 'error');
     } finally {
         showLoading(false);
     }
 }
+
 function normalizeStudent(student) {
     return {
         id: student.id,
@@ -1500,9 +1498,9 @@ async function loadTeachers() {
         if (response.ok) {
             const teachersData = await response.json();
             teachers = Array.isArray(teachersData) ? teachersData : [];
-            console.log('✅ Loaded teachers:', teachers.length);
+            console.log('âœ… Loaded teachers:', teachers.length);
         } else {
-            console.error('❌ Failed to load teachers');
+            console.error('âŒ Failed to load teachers');
             teachers = [];
         }
     } catch (error) {
@@ -1521,9 +1519,9 @@ async function loadGrades() {
         
         if (response.ok) {
             grades = await response.json();
-            console.log('✅ Loaded grades:', grades.length);
+            console.log('âœ… Loaded grades:', grades.length);
         } else {
-            console.error('❌ Failed to load grades');
+            console.error('âŒ Failed to load grades');
             grades = [];
         }
     } catch (error) {
@@ -1534,21 +1532,21 @@ async function loadGrades() {
 
 // Page navigation functions
 function showSignupPage() {
-    console.log('📄 Showing signup page');
+    console.log('ðŸ“„ Showing signup page');
     elements.signupPage.style.display = 'flex';
     elements.loginPage.style.display = 'none';
     elements.dashboard.style.display = 'none';
 }
 
 function showLoginPage() {
-    console.log('📄 Showing login page');
+    console.log('ðŸ“„ Showing login page');
     elements.signupPage.style.display = 'none';
     elements.loginPage.style.display = 'flex';
     elements.dashboard.style.display = 'none';
 }
 
 function showDashboard() {
-    console.log('📄 Showing dashboard');
+    console.log('ðŸ“„ Showing dashboard');
     elements.signupPage.style.display = 'none';
     elements.loginPage.style.display = 'none';
     elements.dashboard.style.display = 'block';
@@ -1562,7 +1560,7 @@ function showDashboard() {
 function updateUserInterface() {
     if (!currentUser) return;
     
-    console.log('🎨 Updating user interface for:', currentUser.name);
+    console.log('ðŸŽ¨ Updating user interface for:', currentUser.name);
     
     elements.roleBadge.textContent = currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
     elements.roleBadge.className = `role-badge ${currentUser.role}`;
@@ -1577,7 +1575,7 @@ function updateUserInterface() {
 }
 
 function updateDashboardStats() {
-    console.log('📊 Updating dashboard stats...');
+    console.log('ðŸ“Š Updating dashboard stats...');
     
     const totalStudentsElement = document.getElementById('totalStudents');
     if (totalStudentsElement) {
@@ -1618,13 +1616,13 @@ function calculateTotalFees() {
 
 function populateStudentsTable(filteredStudents = null) {
     if (!elements.studentsTableBody) {
-        console.warn('⚠️ Students table body not found');
+        console.warn('âš ï¸ Students table body not found');
         return;
     }
     
     const studentsToDisplay = filteredStudents || students;
     
-    console.log('📝 Populating students table with', studentsToDisplay.length, 'students');
+    console.log('ðŸ“ Populating students table with', studentsToDisplay.length, 'students');
     
     elements.studentsTableBody.innerHTML = '';
     
@@ -1661,11 +1659,11 @@ function populateStudentsTable(filteredStudents = null) {
 
 function populateFeesTable() {
     if (!elements.feeTableBody) {
-        console.warn('⚠️ Fee table body not found');
+        console.warn('âš ï¸ Fee table body not found');
         return;
     }
     
-    console.log('📝 Populating fees table with', fees.length, 'fees');
+    console.log('ðŸ“ Populating fees table with', fees.length, 'fees');
     
     elements.feeTableBody.innerHTML = '';
     
@@ -1705,7 +1703,7 @@ function populateFeesTable() {
 function showToast(message, type = 'info') {
     if (!elements.toastNotification || !elements.toastMessage || !elements.toastIcon) return;
     
-    console.log(`🔔 Toast: ${type} - ${message}`);
+    console.log(`ðŸ”” Toast: ${type} - ${message}`);
     
     elements.toastMessage.textContent = message;
     elements.toastNotification.className = `toast ${type}`;
@@ -3515,7 +3513,7 @@ function confirmDeleteStudent(studentId, studentName) {
     const modalHTML = `
         <div class="modal-overlay" id="deleteStudentModal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
             <div style="max-width: 400px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-                <h3 style="color: #dc3545; margin-bottom: 15px;">Ã¢Å¡ Ã¯Â¸Â Confirm Deletion</h3>
+                <h3 style="color: #dc3545; margin-bottom: 15px;">ÃƒÂ¢Ã…Â¡ ÃƒÂ¯Ã‚Â¸Ã‚Â Confirm Deletion</h3>
                 <p style="margin-bottom: 20px;">
                     Are you sure you want to delete student <strong>${studentName}</strong>?
                 </p>
@@ -3599,7 +3597,7 @@ function confirmDeleteTeacher(teacherId, teacherName) {
     const modalHTML = `
         <div class="modal-overlay" id="deleteTeacherModal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); display: flex; align-items: center; justify-content: center; z-index: 9999;">
             <div style="max-width: 400px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-                <h3 style="color: #dc3545; margin-bottom: 15px;">Ã¢Å¡ Ã¯Â¸Â Confirm Deletion</h3>
+                <h3 style="color: #dc3545; margin-bottom: 15px;">ÃƒÂ¢Ã…Â¡ ÃƒÂ¯Ã‚Â¸Ã‚Â Confirm Deletion</h3>
                 <p style="margin-bottom: 20px;">
                     Are you sure you want to delete teacher <strong>${teacherName}</strong>?
                 </p>
@@ -4324,7 +4322,7 @@ function populateAnnouncements(category = '') {
             <p style="color: var(--gray); margin-bottom: 10px;">${ann.content}</p>
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: var(--gray);">
                 <div>
-                    <i class="fas fa-user"></i> ${ann.published_by_name || 'System'} • 
+                    <i class="fas fa-user"></i> ${ann.published_by_name || 'System'} â€¢ 
                     <i class="fas fa-calendar"></i> ${formatDate(ann.start_date)}
                     ${ann.end_date ? ` - ${formatDate(ann.end_date)}` : ''}
                 </div>
@@ -4419,7 +4417,7 @@ function updateDashboardWithAnnouncements() {
             announcementSection.style.marginTop = '20px';
             announcementSection.innerHTML = `
                 <div class="section-header">
-                    <div class="section-title">📢 Important Announcements</div>
+                    <div class="section-title">ðŸ“¢ Important Announcements</div>
                     <div class="view-all" onclick="navigateToPage('announcements')">View All</div>
                 </div>
                 <div id="dashboardAnnouncements"></div>
@@ -4651,7 +4649,7 @@ function showEnhancedDashboard() {
             <div>
                 <strong>Urgent Announcements</strong>
                 ${urgentAnnouncements.map(a => `<div style="margin-top: 5px;">${a.title}</div>`).join('')}
-                <a href="#" onclick="navigateToPage('announcements'); return false;" style="color: #dc3545; font-size: 14px; margin-top: 5px; display: inline-block;">View All →</a>
+                <a href="#" onclick="navigateToPage('announcements'); return false;" style="color: #dc3545; font-size: 14px; margin-top: 5px; display: inline-block;">View All â†’</a>
             </div>
         </div>
         ` : ''}
@@ -5108,21 +5106,21 @@ document.addEventListener('click', function() {
 
 
 console.log(`
-╔════════════════════════════════════════════════════╗
-║   G & J Schools Management System                  ║
-║   Enhanced Edition v2.0                            ║
-║                                                    ║
-║   Features:                                        ║
-║   ✓ Student & Teacher Management                  ║
-║   ✓ Class & Subject Allocations                   ║
-║   ✓ Attendance Tracking                           ║
-║   ✓ Grade Management                              ║
-║   ✓ Fee Management with Partial Payments         ║
-║   ✓ Announcements & Noticeboard                   ║
-║   ✓ Comprehensive Reporting                       ║
-║                                                    ║
-║   Ready for use!                                   ║
-╚════════════════════════════════════════════════════╝
+â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+â•‘   G & J Schools Management System                  â•‘
+â•‘   Enhanced Edition v2.0                            â•‘
+â•‘                                                    â•‘
+â•‘   Features:                                        â•‘
+â•‘   âœ“ Student & Teacher Management                  â•‘
+â•‘   âœ“ Class & Subject Allocations                   â•‘
+â•‘   âœ“ Attendance Tracking                           â•‘
+â•‘   âœ“ Grade Management                              â•‘
+â•‘   âœ“ Fee Management with Partial Payments         â•‘
+â•‘   âœ“ Announcements & Noticeboard                   â•‘
+â•‘   âœ“ Comprehensive Reporting                       â•‘
+â•‘                                                    â•‘
+â•‘   Ready for use!                                   â•‘
+â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 `);
 // Load XLSX library dynamically if not already loaded
 if (typeof XLSX === 'undefined') {

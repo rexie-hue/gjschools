@@ -48,7 +48,7 @@ async function seed() {
           'INSERT INTO users (id, name, email, password_hash, school, role) VALUES ($1,$2,$3,$4,$5,$6)',
           [id, user.name, user.email, hash, user.school, user.role]
         );
-        console.log(`✓ Created ${user.role}: ${user.email} / ${user.password}`);
+        console.log(`âœ“ Created ${user.role}: ${user.email} / ${user.password}`);
       } else {
         console.log(`- User ${user.email} already exists`);
       }
@@ -153,7 +153,7 @@ async function seed() {
           [student.id, student.name, student.email, student.phone, student.dob, student.class, 
            student.parent_name, student.parent_phone, student.address, student.status]
         );
-        console.log(`✓ Created student: ${student.name} (${student.id})`);
+        console.log(`âœ“ Created student: ${student.name} (${student.id})`);
       } else {
         console.log(`- Student ${student.id} already exists`);
       }
@@ -185,7 +185,7 @@ for (const alloc of sampleAllocations) {
                  VALUES ($1, $2, $3, $4)`,
                 [alloc.teacher_id, alloc.class_name, alloc.subject, alloc.academic_year]
             );
-            console.log(`✓ Allocated ${alloc.subject} to ${alloc.teacher_id} for ${alloc.class_name}`);
+            console.log(`âœ“ Allocated ${alloc.subject} to ${alloc.teacher_id} for ${alloc.class_name}`);
         } else {
             console.log(`- Allocation already exists: ${alloc.teacher_id} - ${alloc.class_name}`);
         }
@@ -227,7 +227,7 @@ if (activeStudents.rows.length > 0) {
                 }
             }
             
-            console.log(`✓ Created attendance for ${attendanceDate}`);
+            console.log(`âœ“ Created attendance for ${attendanceDate}`);
         }
     }
 }
@@ -248,7 +248,7 @@ const subjectsCount = await db.query('SELECT COUNT(*) FROM subjects');
 const classesCount = await db.query('SELECT COUNT(*) FROM classes');
 
 console.log('\n=== ENHANCED DATABASE SEEDING COMPLETED ===');
-console.log(`📊 Summary:`);
+console.log(`ðŸ“Š Summary:`);
 console.log(`   Users: ${usersCount.rows[0].count}`);
 console.log(`   Students: ${studentsCount.rows[0].count}`);
 console.log(`   Teachers: ${teachersCount.rows[0].count}`);
@@ -261,18 +261,18 @@ console.log(`   Announcements: ${announcementsCount.rows[0].count}`);
 console.log(`   Subjects: ${subjectsCount.rows[0].count}`);
 console.log(`   Classes: ${classesCount.rows[0].count}`);
 
-console.log('\n📢 New Features Available:');
-console.log('   ✓ Class & Subject Allocations');
-console.log('   ✓ Daily Attendance Tracking');
-console.log('   ✓ Announcements & Noticeboard');
-console.log('   ✓ Enhanced Reporting');
+console.log('\nðŸ“¢ New Features Available:');
+console.log('   âœ“ Class & Subject Allocations');
+console.log('   âœ“ Daily Attendance Tracking');
+console.log('   âœ“ Announcements & Noticeboard');
+console.log('   âœ“ Enhanced Reporting');
 
-console.log('\n🔐 Login Credentials:');
+console.log('\nðŸ” Login Credentials:');
 console.log('   Admin: admin@gjschools.com / admin123');
 console.log('   Accountant: accountant@gjschools.com / account123');
 console.log('   Teacher: teacher@gjschools.com / teacher123');
 
-console.log('\n🚀 You can now start the server with: npm run dev');
+console.log('\nðŸš€ You can now start the server with: npm run dev');
 
     // Sample fees data
     const sampleFees = [
@@ -342,7 +342,7 @@ console.log('\n🚀 You can now start the server with: npm run dev');
           'INSERT INTO fees (id, student_id, class, amount, due_date, status, created_at, updated_at) VALUES ($1,$2,$3,$4,$5,$6,now(),now())',
           [fee.id, fee.student_id, fee.class, fee.amount, fee.due_date, fee.status]
         );
-        console.log(`✓ Created fee: ${fee.id} for ${fee.student_id} - GHS ${fee.amount}`);
+        console.log(`âœ“ Created fee: ${fee.id} for ${fee.student_id} - GHS ${fee.amount}`);
       } else {
         console.log(`- Fee ${fee.id} already exists`);
       }
@@ -366,7 +366,7 @@ console.log('\n🚀 You can now start the server with: npm run dev');
              VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,now())`,
             [paymentId, fee.id, fee.student_id, fee.amount, 'Cash', '2025-01-15', 'Seed payment', receiptNumber, adminId]
           );
-          console.log(`✓ Created payment: ${receiptNumber} for ${fee.id}`);
+          console.log(`âœ“ Created payment: ${receiptNumber} for ${fee.id}`);
         }
       }
     }
@@ -427,7 +427,7 @@ console.log('\n🚀 You can now start the server with: npm run dev');
            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,now(),now())`,
           [teacher.id, teacher.name, teacher.email, teacher.phone, teacher.subject, teacher.qualification, teacher.experience, teacher.salary, teacher.status]
         );
-        console.log(`✓ Created teacher: ${teacher.name} (${teacher.subject})`);
+        console.log(`âœ“ Created teacher: ${teacher.name} (${teacher.subject})`);
       } else {
         console.log(`- Teacher ${teacher.id} already exists`);
       }
@@ -454,7 +454,7 @@ console.log('\n🚀 You can now start the server with: npm run dev');
            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,now(),now())`,
           [gradeId, grade.student_id, grade.subject, grade.grade, grade.term, grade.academic_year, grade.remarks, teacherId]
         );
-        console.log(`✓ Created grade: ${grade.student_id} - ${grade.subject} (${grade.grade})`);
+        console.log(`âœ“ Created grade: ${grade.student_id} - ${grade.subject} (${grade.grade})`);
       }
     }
 
@@ -463,7 +463,7 @@ console.log('\n🚀 You can now start the server with: npm run dev');
     const gradesCount = await db.query('SELECT COUNT(*) FROM grades');
 
     console.log('\n=== DATABASE SEEDING COMPLETED ===');
-    console.log(`📊 Summary:`);
+    console.log(`ðŸ“Š Summary:`);
     console.log(`   Users: ${usersCount.rows[0].count}`);
     console.log(`   Students: ${studentsCount.rows[0].count}`);
     console.log(`   Teachers: ${teachersCount.rows[0].count}`);
@@ -478,22 +478,22 @@ console.log('\n🚀 You can now start the server with: npm run dev');
     const usersCount = await db.query('SELECT COUNT(*) FROM users');
 
     console.log('\n=== DATABASE SEEDING COMPLETED ===');
-    console.log(`📊 Summary:`);
+    console.log(`ðŸ“Š Summary:`);
     console.log(`   Users: ${usersCount.rows[0].count}`);
     console.log(`   Students: ${studentsCount.rows[0].count}`);
     console.log(`   Fees: ${feesCount.rows[0].count}`);
     console.log(`   Payments: ${paymentsCount.rows[0].count}`);
 
-    console.log('\n🔐 Login Credentials:');
+    console.log('\nðŸ” Login Credentials:');
     console.log('   Admin: admin@gjschools.com / admin123');
     console.log('   Accountant: accountant@gjschools.com / account123');
     console.log('   Teacher: teacher@gjschools.com / teacher123');
 
-    console.log('\n🚀 You can now start the server with: npm run dev');
+    console.log('\nðŸš€ You can now start the server with: npm run dev');
 
     process.exit(0);
   } catch (err) {
-    console.error('❌ Database seeding failed:', err.message);
+    console.error('âŒ Database seeding failed:', err.message);
     console.error('Full error:', err);
     process.exit(1);
   }
@@ -501,7 +501,7 @@ console.log('\n🚀 You can now start the server with: npm run dev');
 
 // Handle graceful shutdown
 process.on('SIGINT', () => {
-  console.log('\n⚠️  Seeding interrupted');
+  console.log('\nâš ï¸  Seeding interrupted');
   process.exit(1);
 });
 
