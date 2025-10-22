@@ -1,16 +1,21 @@
 const { Pool } = require('pg');
 
-const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'edumanage',
-  password: 'AbenaAtaa@1',
-  port: 5432,
-  ssl: false,
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-});
+const pool = new Pool(
+  process.env.DATABASE_URL 
+    ? {
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+          rejectUnauthorized: false
+        }
+      }
+    : {
+        user: 'postgres',
+        host: 'localhost',
+        database: 'edumanage',
+        password: 'AbenaAtaa@1',
+        port: 5432,
+      }
+);
 
 pool.on('connect', () => {
   console.log('Connected to PostgreSQL database');
@@ -31,7 +36,9 @@ async function testConnection() {
   }
 }
 
-testConnection();
+if (!process.env.VERCEL) {
+  testConnection();
+}
 
 process.on('SIGINT', () => {
   pool.end(() => {
